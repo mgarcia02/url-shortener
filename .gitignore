@@ -1,0 +1,20 @@
+# Node modules (para backend y futuro frontend)
+node_modules/
+
+# Variables de entorno
+.env
+**/.env
+
+# Archivos de salida y logs
+dist/
+build/
+*.log
+
+# Prisma (base de datos local y generados)
+backend/prisma/dev.db
+backend/prisma/migrations/
+
+# IDEs y sistema
+.vscode/
+.idea/
+.DS_Store
