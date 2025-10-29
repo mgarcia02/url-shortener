@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { handleCreateUrl, handleRedirect, handleTrackClick, handleCheckAvailability, handleDeleteUrl, handleListUrls } from "../controllers/url"
+import { handleCreateUrl, handleRedirect, handleTrackClick, handleCheckAvailability, handleDeleteUrl, handleListUrls } from "../controllers/url.controller"
 
 const router = Router()
 

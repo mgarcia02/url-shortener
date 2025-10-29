@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Url {
-  id        String   @id @default(cuid())
+  id        String   @id @default(autoincrement())
   original  String
   short     String   @unique
   createdAt DateTime @default(now())
