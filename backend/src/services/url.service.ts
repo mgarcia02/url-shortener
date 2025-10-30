@@ -38,4 +38,16 @@ async function getShortUrlsByUser(idUser: number): Promise<UrlDto[]> {
     return result
 }
 
-export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser }
+async function getOriginalFromShort(shortCode: string): Promise<string> {
+    const result = await UrlRepository.findByAlias(shortCode)
+
+    if(!result) throw new Error('ALIAS_DOESNT_EXIST')
+
+    return result.original
+}
+
+async function incrementClickCount(shortCode: string) {
+    await UrlRepository.incrementClickCount(shortCode)
+}
+
+export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser, getOriginalFromShort, incrementClickCount }
