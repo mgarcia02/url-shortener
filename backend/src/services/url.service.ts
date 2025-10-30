@@ -1,8 +1,8 @@
-import { UrlDto } from '@backend/dtos/url.dto'
+import { UrlDto } from '@backend/dtos/urls/url-response.dto'
 import { nanoid } from 'nanoid'
 import { UrlRepository } from '@backend/repositories/url.repository'
 
-async function pruebaService(originalUrl: string, customAlias?: string): Promise<UrlDto>{
+async function createShortUrlService(originalUrl: string, customAlias?: string): Promise<UrlDto>{
     let alias: string
     let exists: boolean
 
@@ -26,4 +26,16 @@ async function pruebaService(originalUrl: string, customAlias?: string): Promise
     }
 }
 
-export { pruebaService }
+async function deleteShortUrlService(shortCode: string): Promise<boolean> {
+    const result = await UrlRepository.delete(shortCode)
+    
+    return result.count > 0
+}
+
+async function getShortUrlsByUser(idUser: number): Promise<UrlDto[]> {
+    const result = await UrlRepository.getAll()
+
+    return result
+}
+
+export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser }
