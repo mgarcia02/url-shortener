@@ -13,10 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Url {
-  id        String   @id @default(autoincrement())
-  original  String
-  short     String   @unique
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
   createdAt DateTime @default(now())
-  clicks    Int      @default(0)
+
+  // Relación inversa
+  urls      Url[]
 }
+
+model Url {
+  id         Int      @id @default(autoincrement())
+  original   String
+  short      String   @unique
+  createdAt  DateTime @default(now())
+  clicks     Int      @default(0)
+
+  // Relación con User
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+}
+

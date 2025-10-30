@@ -1,4 +1,4 @@
-import { UrlDto } from '@backend/dtos/urls/url-response.dto'
+import { UrlDto } from '@backend/dtos/urls/url.dto'
 import { nanoid } from 'nanoid'
 import { UrlRepository } from '@backend/repositories/url.repository'
 

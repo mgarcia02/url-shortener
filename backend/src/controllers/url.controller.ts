@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
-import { CreateUrlSchema } from "@backend/dtos/urls/create-url.dto"
-import { ShortCodeParamSchema } from "@backend/dtos/urls/shortcode-url.dto"
-import { UpdateUrlBodySchema } from "@backend/dtos/urls/update-url.dto"
+import { ValidateCreateUrlSchema } from "@backend/dtos/urls/validate-createUrl.dto"
+import { ValidateShortCodeSchema  } from "@backend/dtos/urls/validate-shortCode.dto"
+import { ValidateUrlSchema } from "@backend/dtos/urls/validate-Url.dto"
 import { createShortUrlService, deleteShortUrlService, getShortUrlsByUserService, updateUrlService, redirectToUrlService } from "../services/url.service"
 
 async function createShortUrl(req: Request, res: Response) {
-    const parseResult = CreateUrlSchema.safeParse(req.body)
+    const parseResult = ValidateCreateUrlSchema.safeParse(req.body)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
     }
@@ -25,7 +25,7 @@ async function createShortUrl(req: Request, res: Response) {
 }
 
 async function deleteShortUrl(req: Request, res: Response) {
-    const parseResult = ShortCodeParamSchema.safeParse(req.params)
+    const parseResult = ValidateShortCodeSchema.safeParse(req.params)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
     }
@@ -42,7 +42,7 @@ async function deleteShortUrl(req: Request, res: Response) {
     }
 }
 
-async function getShortUrlsByUser(req: Request, res: Response) {
+async function getShortUrlsByUser(res: Response) {
     // Futuro habrá usuarios y se tendrá que recibir id usuario para enviar solo las del usuario
     try {
         const list = await getShortUrlsByUserService(1)
@@ -55,8 +55,8 @@ async function getShortUrlsByUser(req: Request, res: Response) {
 }
 
 async function updateUrl(req: Request, res: Response) {
-    const parseParams = ShortCodeParamSchema.safeParse(req.params)
-    const parseBody = UpdateUrlBodySchema.safeParse(req.body)
+    const parseParams = ValidateShortCodeSchema.safeParse(req.params)
+    const parseBody = ValidateUrlSchema.safeParse(req.body)
 
     if (!parseParams.success || !parseBody.success) {
         return res.status(400).json({
@@ -82,7 +82,7 @@ async function updateUrl(req: Request, res: Response) {
 }
 
 async function redirectToUrl(req: Request, res: Response) {
-    const parseResult = ShortCodeParamSchema.safeParse(req.params)
+    const parseResult = ValidateShortCodeSchema.safeParse(req.params)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
     }
