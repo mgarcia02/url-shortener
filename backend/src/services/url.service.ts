@@ -50,4 +50,10 @@ async function incrementClickCount(shortCode: string) {
     await UrlRepository.incrementClickCount(shortCode)
 }
 
-export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser, getOriginalFromShort, incrementClickCount }
+async function updateOriginalUrlService(shortCode: string, newOriginalUrl: string): Promise<boolean> {
+    const result = await UrlRepository.updateOriginal(shortCode, newOriginalUrl)
+
+    return result !== null
+}
+
+export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser, getOriginalFromShort, incrementClickCount, updateOriginalUrlService }

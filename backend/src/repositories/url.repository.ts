@@ -9,6 +9,7 @@ const UrlRepository = {
     create: (original: string, short: string) => prisma.url.create({ data: { original, short } }),
     delete: (short: string) => prisma.url.deleteMany({where: {short: short}}),
     incrementClickCount: (short: string) => prisma.url.update({ where: {short:short}, data: { clicks: { increment: 1 } } }),
+    updateOriginal: (shortCode: string, newOriginalUrl: string) => prisma.url.update({ where: { short: shortCode }, data: { original: newOriginalUrl }})
 }
 
 export { UrlRepository }
