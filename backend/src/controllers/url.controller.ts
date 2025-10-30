@@ -2,9 +2,9 @@ import { Request, Response } from "express"
 import { CreateUrlSchema } from "@backend/dtos/urls/create-url.dto"
 import { ShortCodeParamSchema } from "@backend/dtos/urls/shortcode-url.dto"
 import { UpdateUrlBodySchema } from "@backend/dtos/urls/update-url.dto"
-import { createShortUrlService, deleteShortUrlService, getShortUrlsByUser, updateOriginalUrlService, getOriginalFromShort, incrementClickCount } from "../services/url.service"
+import { createShortUrlService, deleteShortUrlService, getShortUrlsByUserService, updateUrlService, redirectToUrlService } from "../services/url.service"
 
-async function handleCreateUrl(req: Request, res: Response) {
+async function createShortUrl(req: Request, res: Response) {
     const parseResult = CreateUrlSchema.safeParse(req.body)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
@@ -24,7 +24,7 @@ async function handleCreateUrl(req: Request, res: Response) {
     }
 }
 
-async function handleDeleteUrl(req: Request, res: Response) {
+async function deleteShortUrl(req: Request, res: Response) {
     const parseResult = ShortCodeParamSchema.safeParse(req.params)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
@@ -42,10 +42,10 @@ async function handleDeleteUrl(req: Request, res: Response) {
     }
 }
 
-async function handleListUrls(req: Request, res: Response) {
+async function getShortUrlsByUser(req: Request, res: Response) {
     // Futuro habrá usuarios y se tendrá que recibir id usuario para enviar solo las del usuario
     try {
-        const list = await getShortUrlsByUser(1)
+        const list = await getShortUrlsByUserService(1)
         res.status(200).json(list)
     } catch (error) {
         console.error('Unexpected error:', error)
@@ -54,7 +54,7 @@ async function handleListUrls(req: Request, res: Response) {
 
 }
 
-async function handleUpdateUrl(req: Request, res: Response) {
+async function updateUrl(req: Request, res: Response) {
     const parseParams = ShortCodeParamSchema.safeParse(req.params)
     const parseBody = UpdateUrlBodySchema.safeParse(req.body)
 
@@ -71,7 +71,7 @@ async function handleUpdateUrl(req: Request, res: Response) {
     const { originalUrl } = parseBody.data
 
     try {
-        const updated = await updateOriginalUrlService(shortCode, originalUrl)
+        const updated = await updateUrlService(shortCode, originalUrl)
 
         if(!updated) res.status(404).json({ error: 'Alias no encontrado' })
         res.status(200).json({ message: 'URL actualizada correctamente' })
@@ -81,7 +81,7 @@ async function handleUpdateUrl(req: Request, res: Response) {
     }
 }
 
-async function handleRedirect(req: Request, res: Response) {
+async function redirectToUrl(req: Request, res: Response) {
     const parseResult = ShortCodeParamSchema.safeParse(req.params)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
@@ -89,9 +89,7 @@ async function handleRedirect(req: Request, res: Response) {
     const { shortCode } = parseResult.data
 
     try {
-        const originalUrl = await getOriginalFromShort(shortCode)
-
-        await incrementClickCount(shortCode)
+        const originalUrl = await redirectToUrlService(shortCode)
 
         return res.redirect(originalUrl)
     } catch (error) {
@@ -104,4 +102,4 @@ async function handleRedirect(req: Request, res: Response) {
     }
 }
 
-export { handleCreateUrl, handleRedirect, handleUpdateUrl, handleDeleteUrl, handleListUrls }
+export { createShortUrl, deleteShortUrl, getShortUrlsByUser, updateUrl, redirectToUrl }

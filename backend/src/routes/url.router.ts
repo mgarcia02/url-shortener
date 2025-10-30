@@ -1,12 +1,12 @@
 import { Router } from "express"
-import { handleCreateUrl, handleRedirect, handleDeleteUrl, handleUpdateUrl, handleListUrls } from "../controllers/url.controller"
+import { createShortUrl, deleteShortUrl, getShortUrlsByUser, updateUrl, redirectToUrl } from "../controllers/url.controller"
 
 const router = Router()
 
-router.post("/urls", handleCreateUrl)
-router.delete("/urls/:shortCode", handleDeleteUrl)
-router.get("/urls", handleListUrls)
-router.put("/urls/:shortCode", handleUpdateUrl)
-router.get("/:shortCode", handleRedirect)
+router.post("/", createShortUrl);
+router.get("/", getShortUrlsByUser);
+router.get("/resolve/:shortCode", redirectToUrl);
+router.put("/:shortCode", updateUrl);
+router.delete("/:shortCode", deleteShortUrl);
 
 export default router

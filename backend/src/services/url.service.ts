@@ -10,7 +10,7 @@ async function createShortUrlService(originalUrl: string, customAlias?: string):
         if(customAlias) alias = customAlias
         else alias = nanoid(7)
 
-        const result = await UrlRepository.findByAlias(alias)
+        const result = await UrlRepository.findByShortCode(alias)
         exists = result !== null
 
         if(exists && customAlias) throw new Error('ALIAS_EXISTS')
@@ -32,28 +32,26 @@ async function deleteShortUrlService(shortCode: string): Promise<boolean> {
     return result.count > 0
 }
 
-async function getShortUrlsByUser(idUser: number): Promise<UrlDto[]> {
+async function getShortUrlsByUserService(idUser: number): Promise<UrlDto[]> {
     const result = await UrlRepository.getAll()
 
     return result
 }
 
-async function getOriginalFromShort(shortCode: string): Promise<string> {
-    const result = await UrlRepository.findByAlias(shortCode)
-
-    if(!result) throw new Error('ALIAS_DOESNT_EXIST')
-
-    return result.original
-}
-
-async function incrementClickCount(shortCode: string) {
-    await UrlRepository.incrementClickCount(shortCode)
-}
-
-async function updateOriginalUrlService(shortCode: string, newOriginalUrl: string): Promise<boolean> {
+async function updateUrlService(shortCode: string, newOriginalUrl: string): Promise<boolean> {
     const result = await UrlRepository.updateOriginal(shortCode, newOriginalUrl)
 
     return result !== null
 }
 
-export { createShortUrlService, deleteShortUrlService, getShortUrlsByUser, getOriginalFromShort, incrementClickCount, updateOriginalUrlService }
+async function redirectToUrlService(shortCode: string): Promise<string> {
+    const result = await UrlRepository.findByShortCode(shortCode)
+
+    if(!result) throw new Error('ALIAS_DOESNT_EXIST')
+
+    await UrlRepository.incrementClickCount(shortCode)
+
+    return result.original
+}
+
+export { createShortUrlService, deleteShortUrlService, getShortUrlsByUserService, updateUrlService, redirectToUrlService }

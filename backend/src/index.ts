@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(express.json())
-app.use('/api', urlRoutes)
+app.use('/api/urls', urlRoutes)
 
 app.get('/', (_, res) => res.send('Short URL backend is running'))
 
