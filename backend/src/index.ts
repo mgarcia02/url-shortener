@@ -1,15 +1,21 @@
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import urlRoutes from './routes/url.router'
 import userRoutes from './routes/user.router'
+import cookieParser from 'cookie-parser'
+import { PORT } from './config' 
 
-dotenv.config()
 const app = express()
-const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
+
+app.use(cors({
+  origin: 'http://localhost:5173', // frontend
+  credentials: true                // Habilita el intercambio de cookies y otros datos de autenticación
+}))
+
 app.use('/api/urls', urlRoutes)
 app.use('/api/users', userRoutes)
 

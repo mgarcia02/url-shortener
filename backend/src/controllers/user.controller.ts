@@ -5,7 +5,7 @@ async function createUser(req: Request, res: Response) {
     const { userName, email, password } = req.body
 
     try {
-        const user = await createUserService(userName, email, password)
+        const user = await createUserService(userName, email, password, res)
         res.status(201).json(user)
     } catch (error) {
         if (error instanceof Error && error.message === 'USER_EXISTS') {
