@@ -15,8 +15,8 @@ async function createShortUrlService(originalUrl: string, customAlias?: string):
 
         if(exists && customAlias) throw new Error('ALIAS_EXISTS')
     } while(exists)
-
-    const newShortUrl = await UrlRepository.create(originalUrl, alias)
+    // CORREGIIIIIR
+    const newShortUrl = await UrlRepository.create(originalUrl, alias, 1)
     
     return {
         original: newShortUrl.original,
