@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import authRoutes from './routes/auth.router'
 import urlRoutes from './routes/url.router'
 import userRoutes from './routes/user.router'
 import cookieParser from 'cookie-parser'
@@ -16,6 +17,7 @@ app.use(cors({
   credentials: true                // Habilita el intercambio de cookies y otros datos de autenticación
 }))
 
+app.use('/api/auth', authRoutes)
 app.use('/api/urls', urlRoutes)
 app.use('/api/users', userRoutes)
 

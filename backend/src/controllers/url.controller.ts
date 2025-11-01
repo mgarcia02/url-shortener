@@ -12,7 +12,7 @@ async function createShortUrl(req: Request, res: Response) {
     const { originalUrl, customAlias } = parseResult.data
 
     try {
-        const shortUrl = await createShortUrlService(originalUrl, customAlias)
+        const shortUrl = await createShortUrlService( req.user.id, originalUrl, customAlias)
         res.status(201).json(shortUrl)
     } catch (error) {
         if (error instanceof Error && error.message === 'ALIAS_EXISTS') {
@@ -25,6 +25,7 @@ async function createShortUrl(req: Request, res: Response) {
 }
 
 async function deleteShortUrl(req: Request, res: Response) {
+    // comprobar en el service que solo puede eliminar urls suyas
     const parseResult = ValidateShortCodeSchema.safeParse(req.params)
     if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.format() })
@@ -42,10 +43,9 @@ async function deleteShortUrl(req: Request, res: Response) {
     }
 }
 
-async function getShortUrlsByUser(res: Response) {
-    // Futuro habrá usuarios y se tendrá que recibir id usuario para enviar solo las del usuario
+async function getShortUrlsByUser(req: Request, res: Response) {
     try {
-        const list = await getShortUrlsByUserService(1)
+        const list = await getShortUrlsByUserService(req.user.id)
         res.status(200).json(list)
     } catch (error) {
         console.error('Unexpected error:', error)

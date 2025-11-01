@@ -1,4 +1,4 @@
-import { UrlDto } from "../urls/url.dto"
+import UrlDto from "../urls/url.dto"
 
 type UserDto = {
     userName: string
@@ -7,4 +7,4 @@ type UserDto = {
     urls?: UrlDto[]
 }
 
-export { UserDto }
+export default UserDto

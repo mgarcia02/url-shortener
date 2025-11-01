@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { verifyToken } from "@backend/utils/jwt"
-import { UserRepository } from "@backend/repositories/user.repository"
+import UserRepository from "@backend/repositories/user.repository"
 
 async function protectedRoute(req: Request, res: Response, next: NextFunction) {
     try {
@@ -14,8 +14,8 @@ async function protectedRoute(req: Request, res: Response, next: NextFunction) {
             return res.status(401).json({error:"Unauthorized - Invalid Token"})
         }
 
-        const user = await UserRepository.getUser(decoded.id)
-
+        const user = await UserRepository.getUserById(decoded.id)
+        
         req.user = user
 
         next()

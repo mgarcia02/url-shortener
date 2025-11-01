@@ -4,7 +4,7 @@ import { Response } from 'express'
 import { JWT_SECRET } from '@backend/config'
 
 function generateToken(userId: number, res: Response) {
-    const token = jwt.sign({userId}, JWT_SECRET, {expiresIn: "1h"})
+    const token = jwt.sign({id: userId}, JWT_SECRET, {expiresIn: "1h"})
 
     res.cookie("token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000,

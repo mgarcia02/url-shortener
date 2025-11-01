@@ -1,11 +1,11 @@
-import { UserRepository } from "@backend/repositories/user.repository"
-import { UserDto } from "@backend/dtos/users/user.dto"
+import UserRepository from "@backend/repositories/user.repository"
+import UserDto from "@backend/dtos/users/user.dto"
 import bcrypt from "bcrypt"
 import { generateToken } from "@backend/utils/jwt"
 import { Response } from "express"
 
 async function createUserService(userName: string, email: string, password: string, res: Response): Promise<UserDto> {
-    const user = await UserRepository.getUser(userName)
+    const user = await UserRepository.getUserByUsername(userName)
     if(user) throw new Error('USER_EXISTS')
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -22,7 +22,7 @@ async function createUserService(userName: string, email: string, password: stri
 }
 
 async function getUserService(userName: string): Promise<UserDto> {
-    const user = await UserRepository.getUser(userName)
+    const user = await UserRepository.getUserByUsername(userName)
 
     if(!user) throw new Error('USER_DOESNT_EXIST')
     

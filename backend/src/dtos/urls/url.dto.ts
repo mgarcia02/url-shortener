@@ -5,4 +5,4 @@ type UrlDto = {
     clicks: number
 }
 
-export { UrlDto }
+export default UrlDto

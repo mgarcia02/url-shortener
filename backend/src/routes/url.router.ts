@@ -4,7 +4,7 @@ import protectedRoute from "@backend/middlewares/protectedRoute";
 
 const router = Router()
 
-router.post("/", createShortUrl);
+router.post("/",protectedRoute, createShortUrl);
 router.get("/",protectedRoute, getShortUrlsByUser);
 router.get("/resolve/:shortCode", redirectToUrl);
 router.put("/:shortCode",protectedRoute,  updateUrl);
