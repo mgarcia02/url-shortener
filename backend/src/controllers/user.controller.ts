@@ -1,33 +1,32 @@
-import { Request, Response } from "express"
+import { Request, Response, NextFunction } from "express"
 import { createUserService, getUserService } from "@backend/services/user.service"
+import { CreateUserSchema } from "@backend/validations/user.validation"
+import { ValidationError } from "@backend/errors/errors"
+import { generateToken } from "@backend/utils/jwt"
 
-async function createUser(req: Request, res: Response) {
-    const { userName, email, password } = req.body
+async function createUser(req: Request, res: Response, next: NextFunction) {
 
     try {
-        const user = await createUserService(userName, email, password, res)
-        res.status(201).json(user)
+        const parseResult = CreateUserSchema.safeParse(req.body)
+        if (!parseResult.success) throw new ValidationError(parseResult.error?.issues[0].message)
+        const { userName, email, password } = parseResult.data
+
+        const { id, userDto } = await createUserService(userName, email, password)
+
+        generateToken(id, res)
+
+        return res.status(201).json(userDto)
     } catch (error) {
-        if (error instanceof Error && error.message === 'USER_EXISTS') {
-            return res.status(409).json({ error: 'Este usuario ya existe' })
-        }
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 }
 
-async function getUser(req: Request, res: Response) {
-    const { userName } = req.body
-
+async function getUser(req: Request, res: Response, next: NextFunction) {
     try {
-        const user = await getUserService(userName)
-        res.status(200).json(user)
+        const user = await getUserService(req.user.id)
+        return res.status(200).json(user)
     } catch (error) {
-        if (error instanceof Error && error.message === 'USER_DOESNT_EXIST') {
-            return res.status(409).json({ error: 'Este usuario no existe' })
-        }
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 }
 

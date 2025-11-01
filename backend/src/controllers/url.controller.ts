@@ -1,104 +1,72 @@
-import { Request, Response } from "express"
-import { ValidateCreateUrlSchema } from "@backend/dtos/urls/validate-createUrl.dto"
-import { ValidateShortCodeSchema  } from "@backend/dtos/urls/validate-shortCode.dto"
-import { ValidateUrlSchema } from "@backend/dtos/urls/validate-Url.dto"
+import { Request, Response, NextFunction } from "express"
 import { createShortUrlService, deleteShortUrlService, getShortUrlsByUserService, updateUrlService, redirectToUrlService } from "../services/url.service"
+import { CreateShortUrlSchema, ShortCodeSchema, UrlSchema } from "@backend/validations/url.validation"
+import { ValidationError } from "@backend/errors/errors"
 
-async function createShortUrl(req: Request, res: Response) {
-    const parseResult = ValidateCreateUrlSchema.safeParse(req.body)
-    if (!parseResult.success) {
-        return res.status(400).json({ error: parseResult.error.format() })
-    }
-    const { originalUrl, customAlias } = parseResult.data
-
+async function createShortUrl(req: Request, res: Response, next: NextFunction) {
     try {
-        const shortUrl = await createShortUrlService( req.user.id, originalUrl, customAlias)
-        res.status(201).json(shortUrl)
-    } catch (error) {
-        if (error instanceof Error && error.message === 'ALIAS_EXISTS') {
-            return res.status(409).json({ error: 'Ese alias personalizado ya existe' })
-        }
+        const parseResult = CreateShortUrlSchema.safeParse(req.body)
+        if (!parseResult.success) throw new ValidationError(parseResult.error?.issues[0].message)
+        const { originalUrl, customAlias } = parseResult.data
 
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        const shortUrl = await createShortUrlService( req.user.id, originalUrl, customAlias)
+        return res.status(201).json(shortUrl)
+    } catch (error) {
+        next(error)
     }
 }
 
-async function deleteShortUrl(req: Request, res: Response) {
-    // comprobar en el service que solo puede eliminar urls suyas
-    const parseResult = ValidateShortCodeSchema.safeParse(req.params)
-    if (!parseResult.success) {
-        return res.status(400).json({ error: parseResult.error.format() })
-    }
-    const { shortCode } = parseResult.data
-
+async function deleteShortUrl(req: Request, res: Response, next: NextFunction) {
     try {
-        const deleted = await deleteShortUrlService(shortCode)
+        const parseResult = ShortCodeSchema.safeParse(req.params)
+        if (!parseResult.success) throw new ValidationError(parseResult.error?.issues[0].message)
+        const { shortCode } = parseResult.data
 
-        if(!deleted) res.status(404).json({ error: 'Alias no encontrado' })
+        await deleteShortUrlService( req.user.id, shortCode)
         res.status(200).json({ message: 'URL eliminada correctamente' })      
     } catch (error) {
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 }
 
-async function getShortUrlsByUser(req: Request, res: Response) {
+async function getShortUrlsByUser(req: Request, res: Response, next: NextFunction) {
     try {
         const list = await getShortUrlsByUserService(req.user.id)
         res.status(200).json(list)
     } catch (error) {
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 
 }
 
-async function updateUrl(req: Request, res: Response) {
-    const parseParams = ValidateShortCodeSchema.safeParse(req.params)
-    const parseBody = ValidateUrlSchema.safeParse(req.body)
-
-    if (!parseParams.success || !parseBody.success) {
-        return res.status(400).json({
-        error: {
-            params: parseParams.success ? null : parseParams.error.format(),
-            body: parseBody.success ? null : parseBody.error.format()
-        }
-        })
-    }
-
-    const { shortCode } = parseParams.data
-    const { originalUrl } = parseBody.data
-
+async function updateUrl(req: Request, res: Response, next: NextFunction) {
     try {
-        const updated = await updateUrlService(shortCode, originalUrl)
+        const parseParams = ShortCodeSchema.safeParse(req.params)
+        const parseBody = UrlSchema.safeParse(req.body)
 
-        if(!updated) res.status(404).json({ error: 'Alias no encontrado' })
+        if (!parseBody.success) throw new ValidationError(parseBody.error?.issues[0].message)
+        if (!parseParams.success) throw new ValidationError(parseParams.error?.issues[0].message)
+        
+        const { shortCode } = parseParams.data
+        const { originalUrl } = parseBody.data
+
+        await updateUrlService( req.user.id, shortCode, originalUrl)
         res.status(200).json({ message: 'URL actualizada correctamente' })
     } catch (error) {
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 }
 
-async function redirectToUrl(req: Request, res: Response) {
-    const parseResult = ValidateShortCodeSchema.safeParse(req.params)
-    if (!parseResult.success) {
-        return res.status(400).json({ error: parseResult.error.format() })
-    }
-    const { shortCode } = parseResult.data
-
+async function redirectToUrl(req: Request, res: Response, next: NextFunction) {
     try {
-        const originalUrl = await redirectToUrlService(shortCode)
+        const parseResult = ShortCodeSchema.safeParse(req.params)
+        if (!parseResult.success) throw new ValidationError(parseResult.error?.issues[0].message)
+        const { shortCode } = parseResult.data
 
+        const originalUrl = await redirectToUrlService(shortCode)
         return res.redirect(originalUrl)
     } catch (error) {
-        if (error instanceof Error && error.message === 'ALIAS_DOESNT_EXIST') {
-            return res.status(409).json({ error: 'URL no encontrada' })
-        }
-
-        console.error('Unexpected error:', error)
-        res.status(500).json({ error: 'Error interno del servidor' })
+        next(error)
     }
 }
 

@@ -1,18 +1,15 @@
 import { Request, Response, NextFunction } from "express"
 import { verifyToken } from "@backend/utils/jwt"
 import UserRepository from "@backend/repositories/user.repository"
+import { UnauthorizedError } from "@backend/errors/errors"
 
-async function protectedRoute(req: Request, res: Response, next: NextFunction) {
+async function protectedRoute(req: Request, _res: Response, next: NextFunction) {
     try {
         const token = req.cookies.token
-        if(!token) {
-            return res.status(401).json({error:"Unauthorized - No Token Provided"})
-        }
+        if(!token) throw new UnauthorizedError()
 
         const decoded = verifyToken(token)
-        if(!decoded) {
-            return res.status(401).json({error:"Unauthorized - Invalid Token"})
-        }
+        if(!decoded) throw new UnauthorizedError()
 
         const user = await UserRepository.getUserById(decoded.id)
         
@@ -20,8 +17,7 @@ async function protectedRoute(req: Request, res: Response, next: NextFunction) {
 
         next()
     } catch (error) {
-        console.log("ERROR (Error in protectRoute middleware):", error)
-        return res.status(500).json({error:"Internal Server Error"})
+        next(error)
     }
 }
 

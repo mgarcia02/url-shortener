@@ -7,9 +7,9 @@ const UrlRepository = {
     findByUserId: (userId: number) => prisma.url.findMany({ where: { userId: userId } }),
     getAll: () => prisma.url.findMany(),
     create: (original: string, short: string, userId: number) => prisma.url.create({ data: { original, short, userId } }),
-    delete: (short: string) => prisma.url.deleteMany({where: {short: short}}),
+    delete: (userId: number, short: string) => prisma.url.deleteMany({where: {userId: userId, short: short}}),
     incrementClickCount: (short: string) => prisma.url.update({ where: {short:short}, data: { clicks: { increment: 1 } } }),
-    updateOriginal: (shortCode: string, newOriginalUrl: string) => prisma.url.update({ where: { short: shortCode }, data: { original: newOriginalUrl }})
+    updateOriginal: (userId: number, shortCode: string, newOriginalUrl: string) => prisma.url.update({ where: { userId: userId, short: shortCode }, data: { original: newOriginalUrl }})
 }
 
 export default UrlRepository

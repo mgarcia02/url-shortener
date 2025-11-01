@@ -1,6 +1,7 @@
-import UrlDto from '@backend/dtos/urls/url.dto'
+import UrlDto from '@backend/dtos/url.dto'
 import { nanoid } from 'nanoid'
 import UrlRepository from '@backend/repositories/url.repository'
+import { AliasAlreadyExistsError, NotFoundError } from '@backend/errors/errors'
 
 async function createShortUrlService(userId: number, originalUrl: string, customAlias?: string): Promise<UrlDto>{
     let alias: string
@@ -13,7 +14,7 @@ async function createShortUrlService(userId: number, originalUrl: string, custom
         const result = await UrlRepository.findByShortCode(alias)
         exists = result !== null
 
-        if(exists && customAlias) throw new Error('ALIAS_EXISTS')
+        if(exists && customAlias) throw new AliasAlreadyExistsError()
     } while(exists)
 
     const newShortUrl = await UrlRepository.create(originalUrl, alias, userId)
@@ -26,29 +27,28 @@ async function createShortUrlService(userId: number, originalUrl: string, custom
     }
 }
 
-async function deleteShortUrlService(shortCode: string): Promise<boolean> {
-    const result = await UrlRepository.delete(shortCode)
+async function deleteShortUrlService(userId: number, shortCode: string) {
+    const result = await UrlRepository.delete(userId, shortCode)
     
-    return result.count > 0
+    if (result.count <= 0) throw new NotFoundError()
 }
 
 async function getShortUrlsByUserService(userId: number): Promise<UrlDto[]> {
-    console.log(userId)
     const result = await UrlRepository.findByUserId(userId)
 
     return result
 }
 
-async function updateUrlService(shortCode: string, newOriginalUrl: string): Promise<boolean> {
-    const result = await UrlRepository.updateOriginal(shortCode, newOriginalUrl)
+async function updateUrlService(userId: number, shortCode: string, newOriginalUrl: string){
+    const result = await UrlRepository.updateOriginal(userId, shortCode, newOriginalUrl)
 
-    return result !== null
+    if (result === null) throw new NotFoundError()
 }
 
 async function redirectToUrlService(shortCode: string): Promise<string> {
     const result = await UrlRepository.findByShortCode(shortCode)
 
-    if(!result) throw new Error('ALIAS_DOESNT_EXIST')
+    if(!result) throw new NotFoundError()
 
     await UrlRepository.incrementClickCount(shortCode)
 

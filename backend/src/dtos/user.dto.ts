@@ -1,4 +1,4 @@
-import UrlDto from "../urls/url.dto"
+import UrlDto from "./url.dto"
 
 type UserDto = {
     userName: string

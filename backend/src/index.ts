@@ -5,6 +5,7 @@ import urlRoutes from './routes/url.router'
 import userRoutes from './routes/user.router'
 import cookieParser from 'cookie-parser'
 import { PORT } from './config' 
+import errorHandler from './middlewares/errorHandler'
 
 const app = express()
 
@@ -20,6 +21,8 @@ app.use(cors({
 app.use('/api/auth', authRoutes)
 app.use('/api/urls', urlRoutes)
 app.use('/api/users', userRoutes)
+
+app.use(errorHandler)
 
 app.get('/', (_, res) => res.send('Short URL backend is running'))
 

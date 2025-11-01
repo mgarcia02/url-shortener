@@ -1,4 +1,4 @@
-import type { UserDto } from "@backend/dtos/users/user.dto"
+import type { UserDto } from "@backend/dtos/user.dto"
 
 declare global {
     namespace Express {

@@ -1,25 +1,24 @@
 import { Response } from "express"
-import UserDto from "@backend/dtos/users/user.dto"
 import UserRepository from "@backend/repositories/user.repository"
 import bcrypt from "bcrypt"
-import { generateToken } from "@backend/utils/jwt"
+import { InvalidCredentialsError } from "@backend/errors/errors"
+import { LoginResult } from "@backend/types/auth.types"
 
-async function loginService(userName: string, password:string, res:Response): Promise<UserDto> {
+async function loginService(userName: string, password:string):Promise<LoginResult> {
     const user = await UserRepository.getUserByUsername(userName)
     const isPasswordCorrect = await bcrypt.compare(password, user?.password || "")
 
-    if(!user || !isPasswordCorrect) throw new Error('INVALID_USERNAME_OR_PASSWORD')
-
-
-    generateToken(user.id, res)
+    if(!user || !isPasswordCorrect) throw new InvalidCredentialsError()
 
     return {
-        userName: user.userName,
-        email: user.email,
-        createdAt: user.createdAt,
-        urls: user.urls
+        id: user.id,
+        userDto: {
+            userName: user.userName,
+            email: user.email,
+            createdAt: user.createdAt,
+            urls: user.urls
+        }
     }
-
 }
 
 async function logoutService(res: Response) {

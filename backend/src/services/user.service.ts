@@ -1,30 +1,31 @@
 import UserRepository from "@backend/repositories/user.repository"
-import UserDto from "@backend/dtos/users/user.dto"
+import UserDto from "@backend/dtos/user.dto"
 import bcrypt from "bcrypt"
-import { generateToken } from "@backend/utils/jwt"
-import { Response } from "express"
+import { UserAlreadyExistsError, UserNotFoundError } from "@backend/errors/errors"
+import { SignupResult } from "@backend/types/auth.types"
 
-async function createUserService(userName: string, email: string, password: string, res: Response): Promise<UserDto> {
+async function createUserService(userName: string, email: string, password: string): Promise<SignupResult> {
     const user = await UserRepository.getUserByUsername(userName)
-    if(user) throw new Error('USER_EXISTS')
+    if(user) throw new UserAlreadyExistsError()
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const newUser = await UserRepository.create(userName, email, hashedPassword)
 
-    generateToken(newUser.id, res)
-
     return {
-        userName: newUser.userName,
-        email: newUser.email,
-        createdAt: newUser.createdAt,
+        id: newUser.id,
+        userDto: {
+            userName: newUser.userName,
+            email: newUser.email,
+            createdAt: newUser.createdAt
+        }
     }
 }
 
-async function getUserService(userName: string): Promise<UserDto> {
-    const user = await UserRepository.getUserByUsername(userName)
+async function getUserService(userId: number): Promise<UserDto> {
+    const user = await UserRepository.getUserById(userId)
 
-    if(!user) throw new Error('USER_DOESNT_EXIST')
+    if(!user) throw new UserNotFoundError()
     
     console.log(user)
     return {
