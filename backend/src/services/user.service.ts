@@ -28,7 +28,6 @@ async function getUserService(userId: number): Promise<UserDto> {
 
     if(!user) throw new UserNotFoundError()
     
-    console.log(user)
     return {
         userName: user.userName,
         email: user.email,
