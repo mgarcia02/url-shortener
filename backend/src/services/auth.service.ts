@@ -5,7 +5,7 @@ import { InvalidCredentialsError } from "@backend/errors/errors"
 import { LoginResult } from "@backend/types/auth.types"
 
 async function loginService(userName: string, password:string):Promise<LoginResult> {
-    const user = await UserRepository.getUserByUsername(userName)
+    const user = await UserRepository.findByUsername(userName)
     const isPasswordCorrect = await bcrypt.compare(password, user?.password || "")
 
     if(!user || !isPasswordCorrect) throw new InvalidCredentialsError()

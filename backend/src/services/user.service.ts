@@ -48,7 +48,7 @@ async function updateUserService(userId: number, userName?: string, password?: s
     if (!user) throw new NotFoundError()
     
     if(userName && userName !== user.userName){
-        const resultUpdateUserName = await UserRepository.updateUserName(userId, userName)
+        const resultUpdateUserName = await UserRepository.updateUsername(userId, userName)
         if (resultUpdateUserName === null) throw new NotFoundError()
     }
 
