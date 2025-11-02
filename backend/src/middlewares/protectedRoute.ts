@@ -11,7 +11,8 @@ async function protectedRoute(req: Request, _res: Response, next: NextFunction) 
         const decoded = verifyToken(token)
         if(!decoded) throw new UnauthorizedError()
 
-        const user = await UserRepository.getUserById(decoded.id)
+        const user = await UserRepository.findById(decoded.id)
+        if (!user) throw new UnauthorizedError()
         
         req.user = user
 

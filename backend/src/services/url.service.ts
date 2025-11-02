@@ -39,10 +39,24 @@ async function getShortUrlsByUserService(userId: number): Promise<UrlDto[]> {
     return result
 }
 
-async function updateUrlService(userId: number, shortCode: string, newOriginalUrl: string){
-    const result = await UrlRepository.updateOriginal(userId, shortCode, newOriginalUrl)
-
-    if (result === null) throw new NotFoundError()
+async function updateUrlService(userId: number, shortCode: string, newOriginalUrl: string):Promise<UrlDto> {
+    const url = await UrlRepository.findByUserIdAndShortCode(userId, shortCode)
+    if (!url) throw new NotFoundError()
+    
+    if(url && url.original !== newOriginalUrl) {
+        const result = await UrlRepository.updateOriginal(userId, shortCode, newOriginalUrl)
+        if (result === null) throw new NotFoundError()
+    }
+    
+    const newUrl = await UrlRepository.findByUserIdAndShortCode(userId, shortCode)
+    if (!newUrl) throw new NotFoundError()
+    
+    return {
+        original: newUrl.original,
+        short: `https://rega.ly/${newUrl.short}`,
+        createdAt: newUrl.createdAt,
+        clicks: newUrl.clicks
+    }
 }
 
 async function redirectToUrlService(shortCode: string): Promise<string> {
