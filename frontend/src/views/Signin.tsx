@@ -1,17 +1,17 @@
 import { useState } from "react"
 
-function Login() {
+function Signin() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log("Login con:", { email, password })
+        console.log("Signin con:", { email, password })
         // Aquí luego llamas a tu API con axios
     }
     return (
         <div className="max-w-md p-10 mx-auto mb-10 bg-white shadow-md rounded-xl">
-            <h1 className="mb-6 text-2xl font-bold text-center">Login</h1>
+            <h1 className="mb-6 text-2xl font-bold text-center">Iniciar sesión</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                     type="email"
@@ -38,4 +38,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Signin

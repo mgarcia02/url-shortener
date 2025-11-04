@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import Login from "./views/Login"
+import Signin from "./views/Signin"
 import Signup from "./views/Signup"
 import Dashboard from "./views/Dashboard"
-
 import Navbar from "./components/Navbar"
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
         <main className="flex flex-col justify-center h-screen max-w-6xl px-6 pt-6 mx-auto">
           <Routes>
             <Route path="/" element={<Navigate to="dashboard" />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
