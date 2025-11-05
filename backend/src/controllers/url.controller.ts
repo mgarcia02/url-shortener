@@ -9,7 +9,8 @@ async function createShortUrl(req: Request, res: Response, next: NextFunction) {
         if (!parseResult.success) throw new ValidationError(parseResult.error.issues[0].message)
         const { originalUrl, customAlias } = parseResult.data
 
-        const shortUrl = await createShortUrlService( req.user.id, originalUrl, customAlias)
+        const userId = req.user?.id || "demo-user"
+        const shortUrl = await createShortUrlService(userId, originalUrl, customAlias)
         return res.status(201).json(shortUrl)
     } catch (error) {
         next(error)

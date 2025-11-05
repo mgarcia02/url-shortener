@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import UrlRepository from '@backend/repositories/url.repository'
 import { AliasAlreadyExistsError, NotFoundError } from '@backend/errors/errors'
 
-async function createShortUrlService(userId: number, originalUrl: string, customAlias?: string): Promise<UrlDto>{
+async function createShortUrlService(userId: number | "demo-user", originalUrl: string, customAlias?: string): Promise<UrlDto>{
     let alias: string
     let exists: boolean
 
@@ -16,6 +16,15 @@ async function createShortUrlService(userId: number, originalUrl: string, custom
 
         if(exists && customAlias) throw new AliasAlreadyExistsError()
     } while(exists)
+
+        if (userId === "demo-user") {
+            return {
+                original: originalUrl,
+                short: `https://rega.ly/${alias}`,
+                createdAt: new Date(),
+                clicks: 0,
+            }
+        }
 
     const newShortUrl = await UrlRepository.create(originalUrl, alias, userId)
     
