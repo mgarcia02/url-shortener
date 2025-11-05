@@ -1,12 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import Signin from "./views/Signin"
 import Signup from "./views/Signup"
 import Dashboard from "./views/Dashboard"
 import Navbar from "./components/Navbar"
+import { ToastContainer } from "react-toastify"
 
 function App() {
   return (
-    <BrowserRouter>
+    <div>
+      <ToastContainer />
       <div className="min-h-screen">
         <Navbar />
         <main className="flex flex-col justify-center h-screen max-w-6xl px-6 pt-6 mx-auto">
@@ -21,7 +23,8 @@ function App() {
       <footer className="py-10 text-sm text-center border-t-2">
         2025 Mario García Relaño · URL Shortener
       </footer>
-    </BrowserRouter>
+    </div>
+    
   )
 }
 

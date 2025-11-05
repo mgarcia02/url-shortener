@@ -9,13 +9,13 @@ import errorHandler from './middlewares/errorHandler'
 
 const app = express()
 
-app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
   origin: 'http://localhost:5173', // frontend
-  credentials: true                // Habilita el intercambio de cookies y otros datos de autenticación
+  credentials: true,                // Habilita el intercambio de cookies y otros datos de autenticación
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }))
 
 app.use('/api/auth', authRoutes)

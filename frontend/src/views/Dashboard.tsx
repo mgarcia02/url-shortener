@@ -1,18 +1,20 @@
+import { useAuthContext } from "../hooks/useAuthContext"
+
 function Dashboard() {
-    // Aquí luego mostrarás las URLs acortadas del usuario
     const urls = [
         { id: 1, original: "https://google.com", short: "http://rega.ly/abc" },
         { id: 2, original: "https://github.com", short: "http://rega.ly/xyz" },
         { id: 3, original: "https://github.com", short: "http://rega.ly/custom" },
         { id: 4, original: "https://github.com", short: "http://rega.ly/custom2" },
     ]
+    const { authUser } = useAuthContext()
 
     return (
         <div className="max-w-3xl p-8 mx-auto">
             <div className="flex flex-col items-center gap-10 mb-24 text-center">
                 <div className="flex items-center gap-2 px-3 py-1 border rounded-full border-neutral-200 bg-neutral-50">
-                    <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                    <p>Unregistered</p>
+                    <span className={`w-2 h-2 rounded-full animate-pulse ${authUser ? "bg-green-500" : "bg-red-500"}`}></span>
+                    <p>{authUser ? authUser.userName : "Unregistered"}</p>
                 </div>
                 
                 <h1 className="text-4xl font-bold text-gray-900">

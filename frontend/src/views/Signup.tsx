@@ -1,14 +1,16 @@
 import { useState } from "react"
+import useSignUp from "../hooks/useSignUp"
 
 function Signup() {
-    const [username, setUsername] = useState("")
+    const [userName, setUserName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const { loading, signUp } = useSignUp()
+
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
-        console.log("Signup con:", { username, email, password })
-        // Aquí luego llamas a tu API con axios
+        await signUp({userName, email, password})
     }
 
     return (
@@ -19,8 +21,8 @@ function Signup() {
                     type="text"
                     placeholder="Nombre de usuario"
                     className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                 />
                 <input
                     type="email"
@@ -40,7 +42,7 @@ function Signup() {
                     type="submit"
                     className="w-full px-4 py-2 font-semibold text-white transition-colors duration-500 bg-black rounded-xl hover:bg-gray-800"
                 >
-                Registrarse
+                {loading ? "Cargando..." : "Registrarse"}
                 </button>
             </form>
         </div>

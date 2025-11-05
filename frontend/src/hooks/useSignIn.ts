@@ -1,20 +1,20 @@
 import { useState } from "react"
 import { useAuthContext } from "./useAuthContext"
-import type { SignUpDTO } from "../types/userTypes"
-import { signUpService } from "../services/userService"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import type { SignInDTO } from "../types/authTypes"
+import { signInService } from "../services/authService"
 
-function useSignUp() {
+function useSignIn() {
     const [loading, setLoading] = useState(false)
     const { setAuthUser } = useAuthContext()
     const navigate = useNavigate()
 
-    const signUp = async(obj: SignUpDTO) => {
+    const signIn = async(obj: SignInDTO) => {
         try {
             setLoading(true)
 
-            const { data, error } = await signUpService(obj)
+            const { data, error } = await signInService(obj)
             if (error) throw new Error(error)
 
             // localStorage
@@ -37,8 +37,8 @@ function useSignUp() {
         }
     }
     
-    return { loading, signUp }
+    return { loading, signIn }
 
 }
 
-export default useSignUp
+export default useSignIn

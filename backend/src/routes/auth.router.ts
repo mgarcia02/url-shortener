@@ -4,7 +4,7 @@ import protectedRoute from "@backend/middlewares/protectedRoute"
 
 const router = Router()
 
-router.post("/login", login)
-router.post("/logout", protectedRoute, logout)
+router.post("/signin", login)
+router.post("/signout", protectedRoute, logout)
 
 export default router

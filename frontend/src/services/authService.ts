@@ -2,7 +2,7 @@ import axios from "axios"
 import type { SignInDTO } from "../types/authTypes";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001/api/auth',
+    baseURL: 'http://localhost:3000/api/auth',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -11,21 +11,24 @@ const api = axios.create({
 
 async function signInService(obj: SignInDTO) {
     try {
-        const response = await api.post('/signin', obj);
-        return response
-    } catch (e) {
-        console.log(e)
-        //return e.response
+        const res = await api.post('/signin', obj);
+        return { data: res.data, error: null }
+    } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+            return { data: null, error: e.response?.data?.error?.message || "Error en la red"}
+        }
+        return { data: null, error: "Error desconocido"}
     }
 }
 
 async function signOutService() {
     try {
-        const response = await api.post('/signout');
-        return response
-    } catch (e) {
-        console.log(e)
-        //return e.response
+        await api.post('/signout');
+    } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+            return e.response?.data?.error?.message || "Error en la red"
+        }
+        return "Error desconocido"
     }
 }
 

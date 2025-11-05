@@ -2,7 +2,7 @@ import axios from "axios"
 import type { SignUpDTO } from "../types/userTypes";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001/api/users',
+    baseURL: 'http://localhost:3000/api/users',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -11,12 +11,15 @@ const api = axios.create({
 
 async function signUpService(obj: SignUpDTO) {
     try {
-        const response = await api.post('/', obj);
-        return response
-    } catch (e) {
-        console.log(e)
-        //return e.response
+        const res = await api.post('/', obj);
+        return { data: res.data, error: null }
+    } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+            return { data: null, error: e.response?.data?.error?.message || "Error en la red"}
+        }
+        return { data: null, error: "Error desconocido"}
     }
 }
+
 
 export { signUpService }
