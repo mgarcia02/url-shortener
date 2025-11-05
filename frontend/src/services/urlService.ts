@@ -1,16 +1,16 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api/users',
+    baseURL: 'http://localhost:3000/api/urls',
     headers: {
         'Content-Type': 'application/json',
     },
     withCredentials: true,
 })
 
-async function infoUserService() {
+async function getUrlsByUserService() {
     try {
-        const res = await api.post('/');
+        const res = await api.get('/');
         return { data: res.data, error: null }
     } catch (e: unknown) {
         if (axios.isAxiosError(e)) {
@@ -21,4 +21,4 @@ async function infoUserService() {
 }
 
 
-export { infoUserService }
+export { getUrlsByUserService }

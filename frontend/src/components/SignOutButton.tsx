@@ -1,7 +1,7 @@
-import useSignOut from "../hooks/useSignOut"
+import useAuth from "../hooks/useAuth"
 
 function SignOutButton() {
-    const { loading, signOut } = useSignOut()
+    const { loading, signOut } = useAuth()
 
     return (
         <div>

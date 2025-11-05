@@ -4,6 +4,12 @@ interface SignInDTO {
     password: string
 }
 
+interface SignUpDTO {
+    userName: string
+    email: string
+    password: string
+}
+
 // Define el tipo de usuario
 interface AuthUser {
     userName: string
@@ -16,4 +22,4 @@ interface AuthContextType {
     setAuthUser: (user: AuthUser | null) => void
 }
 
-export type { SignInDTO, AuthUser, AuthContextType }
+export type { SignInDTO, SignUpDTO, AuthUser, AuthContextType }

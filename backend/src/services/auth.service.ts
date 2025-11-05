@@ -1,10 +1,28 @@
 import { Response } from "express"
 import UserRepository from "@backend/repositories/user.repository"
 import bcrypt from "bcrypt"
-import { InvalidCredentialsError } from "@backend/errors/errors"
-import { LoginResult } from "@backend/types/auth.types"
+import { InvalidCredentialsError, UserAlreadyExistsError } from "@backend/errors/errors"
+import { SignupResult, signInResult } from "@backend/types/auth.types"
 
-async function loginService(userName: string, password:string):Promise<LoginResult> {
+async function signUpService(userName: string, email: string, password: string): Promise<SignupResult> {
+    const user = await UserRepository.findByUsername(userName)
+    if(user) throw new UserAlreadyExistsError()
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const newUser = await UserRepository.create(userName, email, hashedPassword)
+
+    return {
+        id: newUser.id,
+        userDto: {
+            userName: newUser.userName,
+            email: newUser.email,
+            createdAt: newUser.createdAt
+        }
+    }
+}
+
+async function signInService(userName: string, password:string):Promise<signInResult> {
     const user = await UserRepository.findByUsername(userName)
     const isPasswordCorrect = await bcrypt.compare(password, user?.password || "")
 
@@ -21,8 +39,8 @@ async function loginService(userName: string, password:string):Promise<LoginResu
     }
 }
 
-async function logoutService(res: Response) {
+async function signOutService(res: Response) {
     res.cookie("token", "", {maxAge:0})
 }
 
-export { loginService, logoutService }
+export { signUpService, signInService, signOutService }

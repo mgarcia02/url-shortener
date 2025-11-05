@@ -1,10 +1,11 @@
 import { Router } from "express"
-import { login, logout } from "@backend/controllers/auth.controller"
+import { signUp, signIn, signOut } from "@backend/controllers/auth.controller"
 import protectedRoute from "@backend/middlewares/protectedRoute"
 
 const router = Router()
 
-router.post("/signin", login)
-router.post("/signout", protectedRoute, logout)
+router.post("/", signUp)
+router.post("/signin", signIn)
+router.post("/signout", protectedRoute, signOut)
 
 export default router

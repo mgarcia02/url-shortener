@@ -1,6 +1,6 @@
 import UserDto from "@backend/dtos/user.dto"
 
-interface LoginResult {
+interface signInResult {
     id: number
     userDto: UserDto
 }
@@ -10,4 +10,4 @@ interface SignupResult {
     userDto: UserDto
 }
 
-export { LoginResult, SignupResult }
+export { signInResult, SignupResult }

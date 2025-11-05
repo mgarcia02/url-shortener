@@ -1,13 +1,21 @@
+import { useEffect, useState } from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
+import useUrls from "../hooks/useUrls"
+import type { Url } from "../types/urlTypes"
 
 function Dashboard() {
-    const urls = [
-        { id: 1, original: "https://google.com", short: "http://rega.ly/abc" },
-        { id: 2, original: "https://github.com", short: "http://rega.ly/xyz" },
-        { id: 3, original: "https://github.com", short: "http://rega.ly/custom" },
-        { id: 4, original: "https://github.com", short: "http://rega.ly/custom2" },
-    ]
+    const [urls, setUrls] = useState<Url[]>([])
+    const { loading, getUrls } = useUrls()
     const { authUser } = useAuthContext()
+
+    useEffect(() => {
+        const fetchData = async () => {
+        const data = await getUrls()
+        if (data) setUrls(data)
+        }
+        fetchData()
+    }, [getUrls])
+    
 
     return (
         <div className="max-w-3xl p-8 mx-auto">
@@ -49,24 +57,28 @@ function Dashboard() {
                 </form>
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
-                <ul className="space-y-4">
-                    {urls.map((url) => (
-                    <li
-                        key={url.id}
-                        className="flex items-center justify-between pb-2 border-b"
-                    >
-                        <span className="text-gray-700 truncate">{url.original}</span>
-                        <a
-                        href={url.short}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-black hover:underline"
+                {loading ? (
+                    <p>Cargando URLs...</p>
+                ) : (
+                    <ul className="space-y-4">
+                        {urls.map((url) => (
+                        <li
+                            key={url.short}
+                            className="flex items-center justify-between pb-2 border-b"
                         >
-                        {url.short}
-                        </a>
-                    </li>
-                    ))}
-                </ul>
+                            <span className="text-gray-700 truncate">{url.original}</span>
+                            <a
+                            href={url.short}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-black hover:underline"
+                            >
+                            {url.short}
+                            </a>
+                        </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
         
