@@ -1,10 +1,7 @@
-import useUrls from "../hooks/useUrls"
 import { useEffect } from "react"
+import type { UrlsListProps } from "../types/urlTypes"
 
-
-function UrlsList() {
-    const { urls, loading, getUrls } = useUrls()
-
+function UrlsList({ urls, loading, getUrls }: UrlsListProps) {
     useEffect(() => {
         const fetchData = async () => { await getUrls() }
 

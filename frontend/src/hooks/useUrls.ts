@@ -34,7 +34,7 @@ function useUrls() {
     const createUrl = async(obj: UrlDto) => {
         try {
             setLoading(true)
-
+            
             const { data, error } = await createUrlService(obj, !!authUser)
             if (error) throw new Error(error)
 

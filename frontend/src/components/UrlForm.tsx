@@ -1,16 +1,19 @@
-import useUrls from "../hooks/useUrls"
 import { useState } from "react"
+import type { UrlFormProps } from "../types/urlTypes"
 
-
-function UrlFrom() {
+function UrlFrom({ createUrl, loading }: UrlFormProps) {
     const [short, setShortUrl] = useState("")
     const [original, setOriginalUrl] = useState("")
 
-    const { loading, createUrl } = useUrls()
-
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
-        await createUrl({original, short})
+        const payload: { original: string; short?: string } = { original }
+
+        if (short.trim() !== "") {
+            payload.short = short
+        }
+
+        await createUrl(payload)
     }
 
     return (

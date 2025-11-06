@@ -1,9 +1,11 @@
 import { useAuthContext } from "../hooks/useAuthContext"
 import UrlsList from "../components/UrlsList"
 import UrlFrom from "../components/UrlForm"
+import useUrls from "../hooks/useUrls"
 
 function Dashboard() {
     const { authUser } = useAuthContext()
+    const { urls, loading, getUrls, createUrl } = useUrls()
     
     return (
         <div className="max-w-3xl p-8 mx-auto">
@@ -22,10 +24,10 @@ function Dashboard() {
                 </p>
             </div>
             <div className="flex flex-col gap-5 p-10 mb-10 bg-white shadow-md rounded-xl">
-                <UrlFrom />
+                <UrlFrom createUrl={createUrl} loading={loading} />
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
-                <UrlsList />
+                <UrlsList urls={urls} loading={loading} getUrls={getUrls} />
             </div>
         </div>
         

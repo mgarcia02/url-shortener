@@ -10,4 +10,15 @@ interface UrlDto {
     short?: string
 }
 
-export type { Url, UrlDto }
+interface UrlsListProps {
+    urls: Url[]
+    loading: boolean
+    getUrls: () => Promise<void>
+}
+
+interface UrlFormProps {
+    createUrl: (obj: UrlDto) => Promise<void>
+    loading: boolean
+}
+
+export type { Url, UrlDto, UrlsListProps, UrlFormProps }

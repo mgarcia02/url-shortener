@@ -44,8 +44,12 @@ async function deleteShortUrlService(userId: number, shortCode: string) {
 
 async function getShortUrlsByUserService(userId: number): Promise<UrlDto[]> {
     const result = await UrlRepository.findByUserId(userId)
+    const mapped = result.map(url => ({
+        ...url,
+        short: `https://rega.ly/${url.short}`
+    }))
 
-    return result
+    return mapped
 }
 
 async function updateUrlService(userId: number, shortCode: string, newOriginalUrl: string):Promise<UrlDto> {
