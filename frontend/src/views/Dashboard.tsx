@@ -2,6 +2,7 @@ import { useAuthContext } from "../hooks/useAuthContext"
 import UrlsList from "../components/UrlsList"
 import UrlFrom from "../components/UrlForm"
 import useUrls from "../hooks/useUrls"
+import WarningTootip from "../components/WarningTootip"
 
 function Dashboard() {
     const { authUser } = useAuthContext()
@@ -27,6 +28,7 @@ function Dashboard() {
                 <UrlFrom createUrl={createUrl} loading={loading} />
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
+                <WarningTootip isAuth={!!authUser} hasNoUrls={urls.length === 0} />
                 <UrlsList urls={urls} loading={loading} getUrls={getUrls} />
             </div>
         </div>

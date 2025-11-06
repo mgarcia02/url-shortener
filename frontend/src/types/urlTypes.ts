@@ -21,4 +21,9 @@ interface UrlFormProps {
     loading: boolean
 }
 
-export type { Url, UrlDto, UrlsListProps, UrlFormProps }
+interface WarningTooltipProps {
+    isAuth: boolean
+    hasNoUrls: boolean
+}
+
+export type { Url, UrlDto, UrlsListProps, UrlFormProps, WarningTooltipProps }
