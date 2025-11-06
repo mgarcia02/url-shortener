@@ -38,7 +38,7 @@ async function createUrlService(obj: UrlDto, auth: boolean) {
 
 async function deleteUrlService(shortCode: string) {
     try {
-        const res = await api.delete(`/urls/${shortCode}`);
+        const res = await api.delete(`/${shortCode}`);
         return { data: res.data, error: null }
     } catch (e: unknown) {
         if (axios.isAxiosError(e)) {

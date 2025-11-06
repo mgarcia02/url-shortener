@@ -91,7 +91,9 @@ function useUrls() {
                 setUrls(updated)
                 toast.success("URL eliminada de la lista demo")
             } else {
-                const { data, error } = await deleteUrlService(short)
+                const shortCode = short.replace("https://rega.ly/", "")
+
+                const { data, error } = await deleteUrlService(shortCode)
                 if (error) throw new Error(error)
                 // Usuario autenticado, el backend ya la borró
                 setUrls(prev => prev.filter(u => u.short === short ? false : true))
