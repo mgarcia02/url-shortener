@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import type { UrlsListProps } from "../types/urlTypes"
 import DeleteButton from "./DeleteButton"
+import arrowDown from "../assets/arrowDown-icon.svg"
+import arrowUp from "../assets/arrowUp-icon.svg"
 
 function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -33,8 +35,12 @@ function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
                 <div className="flex items-center justify-between pb-2 border-b">
                     <span className="flex-1 text-gray-700 truncate" title={url.original}>{url.original}</span>
 
-                    <button onClick={() => toggle(index)} className="flex-1 text-gray-500 transition hover:text-black">
-                        {openIndex === index ? "▲" : "▼"}
+                    <button onClick={() => toggle(index)} className="flex justify-center flex-1 text-gray-500 transition hover:text-black">
+                        {openIndex === index ? 
+                        <img src={arrowUp} alt="Logo" className="w-auto h-5 cursor-pointer" />
+                        : 
+                        <img src={arrowDown} alt="Logo" className="w-auto h-5 cursor-pointer" />
+                        }
                     </button>
 
                     <a href={url.short} target="_blank" rel="noopener noreferrer" className="flex-1 text-right text-black truncate hover:underline" title={url.short}>

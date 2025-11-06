@@ -7,7 +7,7 @@ function SignOutButton() {
         <div>
             {!loading ?
                 (
-                    <p onClick={signOut}>Sign Out</p>
+                    <p onClick={signOut} className="cursor-pointer">Sign Out</p>
                 )
                 :
                 (
