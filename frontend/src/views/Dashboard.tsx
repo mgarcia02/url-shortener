@@ -1,22 +1,9 @@
-import { useEffect, useState } from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
-import useUrls from "../hooks/useUrls"
-import type { Url } from "../types/urlTypes"
+import UrlsList from "../components/UrlsList"
 
 function Dashboard() {
-    const [urls, setUrls] = useState<Url[]>([])
-    const { loading, getUrls } = useUrls()
     const { authUser } = useAuthContext()
-
-    useEffect(() => {
-        const fetchData = async () => {
-        const data = await getUrls()
-        if (data) setUrls(data)
-        }
-        fetchData()
-    }, [getUrls])
     
-
     return (
         <div className="max-w-3xl p-8 mx-auto">
             <div className="flex flex-col items-center gap-10 mb-24 text-center">
@@ -57,28 +44,7 @@ function Dashboard() {
                 </form>
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
-                {loading ? (
-                    <p>Cargando URLs...</p>
-                ) : (
-                    <ul className="space-y-4">
-                        {urls.map((url) => (
-                        <li
-                            key={url.short}
-                            className="flex items-center justify-between pb-2 border-b"
-                        >
-                            <span className="text-gray-700 truncate">{url.original}</span>
-                            <a
-                            href={url.short}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-black hover:underline"
-                            >
-                            {url.short}
-                            </a>
-                        </li>
-                        ))}
-                    </ul>
-                )}
+                {authUser ? <UrlsList /> : <p className="py-6 text-center text-gray-500">Debes iniciar sesión para ver tus URLs</p>}
             </div>
         </div>
         
