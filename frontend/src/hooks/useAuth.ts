@@ -77,6 +77,7 @@ function useAuth() {
 
             // localStorage
             localStorage.removeItem("user")
+            localStorage.removeItem("urls")
             // Context
             setAuthUser(null)
 

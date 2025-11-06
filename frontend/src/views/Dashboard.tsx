@@ -1,5 +1,6 @@
 import { useAuthContext } from "../hooks/useAuthContext"
 import UrlsList from "../components/UrlsList"
+import UrlFrom from "../components/UrlForm"
 
 function Dashboard() {
     const { authUser } = useAuthContext()
@@ -21,30 +22,10 @@ function Dashboard() {
                 </p>
             </div>
             <div className="flex flex-col gap-5 p-10 mb-10 bg-white shadow-md rounded-xl">
-                <form className="flex flex-col w-full gap-2">
-                    <div className="flex">
-                        <input
-                        type="url"
-                        placeholder="Introduce tu URL"
-                        className="w-3/4 px-4 py-2 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-1 focus:ring-black"
-                        />
-                        
-                        <button
-                        type="submit"
-                        className="w-1/4 font-semibold text-white transition-colors duration-500 bg-black rounded-r-xl hover:bg-gray-800"
-                        >
-                        Crear short url
-                        </button>
-                    </div>
-                    <input
-                    type="alias"
-                    placeholder="Introduce alias personalizado"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                </form>
+                <UrlFrom />
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
-                {authUser ? <UrlsList /> : <p className="py-6 text-center text-gray-500">Debes iniciar sesión para ver tus URLs</p>}
+                <UrlsList />
             </div>
         </div>
         

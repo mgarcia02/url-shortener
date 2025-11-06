@@ -5,4 +5,9 @@ interface Url {
     clicks: number
 }
 
-export type { Url }
+interface UrlDto {
+    original: string
+    short?: string
+}
+
+export type { Url, UrlDto }
