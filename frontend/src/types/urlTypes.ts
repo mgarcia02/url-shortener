@@ -14,6 +14,7 @@ interface UrlsListProps {
     urls: Url[]
     loading: boolean
     getUrls: () => Promise<void>
+    deleteUrl: (short: string) => Promise<void>
 }
 
 interface UrlFormProps {
@@ -21,9 +22,10 @@ interface UrlFormProps {
     loading: boolean
 }
 
-interface WarningTooltipProps {
-    isAuth: boolean
-    hasNoUrls: boolean
+interface DeleteButtonProps {
+    deleteUrl: (short: string) => Promise<void>
+    shortCode: string
+    loading: boolean
 }
 
-export type { Url, UrlDto, UrlsListProps, UrlFormProps, WarningTooltipProps }
+export type { Url, UrlDto, UrlsListProps, UrlFormProps, DeleteButtonProps }

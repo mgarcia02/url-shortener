@@ -10,7 +10,7 @@ const api = axios.create({
 
 async function infoUserService() {
     try {
-        const res = await api.post('/');
+        const res = await api.get('/');
         return { data: res.data, error: null }
     } catch (e: unknown) {
         if (axios.isAxiosError(e)) {

@@ -2,11 +2,11 @@ import { useAuthContext } from "../hooks/useAuthContext"
 import UrlsList from "../components/UrlsList"
 import UrlFrom from "../components/UrlForm"
 import useUrls from "../hooks/useUrls"
-import WarningTootip from "../components/WarningTootip"
+import warningIcon from "../assets/warning-icon.svg"
 
 function Dashboard() {
     const { authUser } = useAuthContext()
-    const { urls, loading, getUrls, createUrl } = useUrls()
+    const { urls, loading, getUrls, createUrl, deleteUrl } = useUrls()
     
     return (
         <div className="max-w-3xl p-8 mx-auto">
@@ -28,8 +28,16 @@ function Dashboard() {
                 <UrlFrom createUrl={createUrl} loading={loading} />
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
-                <WarningTootip isAuth={!!authUser} hasNoUrls={urls.length === 0} />
-                <UrlsList urls={urls} loading={loading} getUrls={getUrls} />
+                {
+                    !!authUser || urls.length === 0 ? 
+                    null : (
+                    <div className="flex justify-center mb-10">
+                        <img title="Demo: las URLs no funcionarán hasta que te registres" src={warningIcon} alt="Logo" className="w-auto h-5 cursor-pointer" />
+                    </div>
+                    )
+                    
+                }
+                <UrlsList urls={urls} loading={loading} getUrls={getUrls} deleteUrl={deleteUrl} />
             </div>
         </div>
         

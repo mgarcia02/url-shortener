@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { UrlsListProps } from "../types/urlTypes"
 import DeleteButton from "./DeleteButton"
 
-function UrlsList({ urls, loading, getUrls }: UrlsListProps) {
+function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null)
 
     const toggle = (index: number) => {
@@ -54,7 +54,7 @@ function UrlsList({ urls, loading, getUrls }: UrlsListProps) {
                         {new Date(url.createdAt).toLocaleString()}
                         </p>
                     </div>
-                    <DeleteButton />
+                    <DeleteButton deleteUrl={deleteUrl} shortCode={url.short} loading={loading} />
                     </div>
                 </div>
             </li>
