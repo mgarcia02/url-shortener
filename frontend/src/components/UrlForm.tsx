@@ -14,6 +14,9 @@ function UrlFrom({ createUrl, loading }: UrlFormProps) {
         }
 
         await createUrl(payload)
+
+        setOriginalUrl("")
+        setShortUrl("")
     }
 
     return (

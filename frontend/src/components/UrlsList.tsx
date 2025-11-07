@@ -5,9 +5,9 @@ import arrowDown from "../assets/arrowDown-icon.svg"
 import arrowUp from "../assets/arrowUp-icon.svg"
 
 function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
-    const [openIndex, setOpenIndex] = useState<number | null>(null)
+    const [openIndex, setOpenIndex] = useState<string | null>(null)
 
-    const toggle = (index: number) => {
+    const toggle = (index: string) => {
         setOpenIndex(openIndex === index ? null : index)
     }
     
@@ -30,13 +30,13 @@ function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
 
     return (
         <ul className="space-y-6">
-            {urls.map((url, index) => (
+            {urls.map((url) => (
             <li key={url.short}>
                 <div className="flex items-center justify-between pb-2 border-b">
                     <span className="flex-1 text-gray-700 truncate" title={url.original}>{url.original}</span>
 
-                    <button onClick={() => toggle(index)} className="flex justify-center flex-1 text-gray-500 transition hover:text-black">
-                        {openIndex === index ? 
+                    <button onClick={() => toggle(url.short)} className="flex justify-center flex-1 text-gray-600 transition hover:text-black">
+                        {openIndex === url.short ? 
                         <img src={arrowUp} alt="Logo" className="w-auto h-5 cursor-pointer" />
                         : 
                         <img src={arrowDown} alt="Logo" className="w-auto h-5 cursor-pointer" />
@@ -49,7 +49,7 @@ function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
                 </div>
                 <div
                     className={`transition-all duration-700 overflow-hidden ${
-                    openIndex === index ? "max-h-40 mt-2" : "max-h-0"
+                    openIndex === url.short ? "max-h-40 mt-2" : "max-h-0"
                     }`}
                 >
                     <div className="flex items-center justify-between text-sm text-gray-600">

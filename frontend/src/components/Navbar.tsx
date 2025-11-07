@@ -14,8 +14,8 @@ function Navbar() {
                     authUser ? <SignOutButton />
                     :
                     <>
-                        <Link to="/signin">Sign in</Link>
-                        <Link className="p-2 border-2 rounded-xl" to="/signup">Sign up</Link>
+                        <Link to="/signin" className="hover:text-gray-500">Sign in</Link>
+                        <Link className="p-2 border-2 hover:text-gray-500 rounded-xl" to="/signup">Sign up</Link>
                     </>
                 }
                 
