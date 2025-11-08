@@ -10,22 +10,13 @@ interface UrlDto {
     short?: string
 }
 
-interface UrlsListProps {
+export interface UrlsContextType {
     urls: Url[]
-    loading: boolean
-    getUrls: () => Promise<void>
-    deleteUrl: (short: string) => Promise<void>
-}
-
-interface UrlFormProps {
-    createUrl: (obj: UrlDto) => Promise<void>
-    loading: boolean
+    setUrls: React.Dispatch<React.SetStateAction<Url[]>>
 }
 
 interface DeleteButtonProps {
-    deleteUrl: (short: string) => Promise<void>
     shortCode: string
-    loading: boolean
 }
 
-export type { Url, UrlDto, UrlsListProps, UrlFormProps, DeleteButtonProps }
+export type { Url, UrlDto, DeleteButtonProps }

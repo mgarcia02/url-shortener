@@ -3,10 +3,11 @@ import { useAuthContext } from "./useAuthContext"
 import type { Url, UrlDto } from "../types/urlTypes"
 import { toast } from "react-toastify"
 import { createUrlService, deleteUrlService, getUrlsByUserService } from "../services/urlService"
+import { useUrlsContext } from "./useUrlsContext"
 
 function useUrls() {
     const { authUser } = useAuthContext()
-    const [urls, setUrls] = useState<Url[]>([])
+    const { urls, setUrls } = useUrlsContext()
     const [loading, setLoading] = useState(false)
     
     const getUrls = useCallback(async() => {
@@ -29,7 +30,7 @@ function useUrls() {
         } finally {
             setLoading(false)
         }
-    }, [authUser])
+    }, [authUser, setUrls])
 
     const createUrl = async(obj: UrlDto) => {
         try {

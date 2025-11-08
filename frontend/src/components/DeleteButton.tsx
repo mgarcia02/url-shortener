@@ -1,7 +1,9 @@
 import trashIcon from "../assets/trash-icon.svg"
+import useUrls from "../hooks/useUrls"
 import type { DeleteButtonProps } from "../types/urlTypes"
 
-function DeleteButton({deleteUrl, shortCode, loading}: DeleteButtonProps) {
+function DeleteButton({ shortCode }: DeleteButtonProps) {
+    const { loading, deleteUrl } = useUrls()
 
     return (
         <div>

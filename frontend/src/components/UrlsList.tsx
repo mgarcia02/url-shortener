@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import type { UrlsListProps } from "../types/urlTypes"
 import DeleteButton from "./DeleteButton"
 import arrowDown from "../assets/arrowDown-icon.svg"
 import arrowUp from "../assets/arrowUp-icon.svg"
+import useUrls from "../hooks/useUrls"
 
-function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
+function UrlsList() {
     const [openIndex, setOpenIndex] = useState<string | null>(null)
+    const { loading, urls, getUrls } = useUrls()
 
     const toggle = (index: string) => {
         setOpenIndex(openIndex === index ? null : index)
@@ -60,7 +61,7 @@ function UrlsList({ urls, loading, getUrls, deleteUrl }: UrlsListProps) {
                         {new Date(url.createdAt).toLocaleString()}
                         </p>
                     </div>
-                    <DeleteButton deleteUrl={deleteUrl} shortCode={url.short} loading={loading} />
+                    <DeleteButton shortCode={url.short} />
                     </div>
                 </div>
             </li>

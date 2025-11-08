@@ -6,7 +6,7 @@ import warningIcon from "../assets/warning-icon.svg"
 
 function Dashboard() {
     const { authUser } = useAuthContext()
-    const { urls, loading, getUrls, createUrl, deleteUrl } = useUrls()
+    const { urls } = useUrls()
     
     return (
         <div className="max-w-3xl p-8 mx-auto">
@@ -25,7 +25,7 @@ function Dashboard() {
                 </p>
             </div>
             <div className="flex flex-col gap-5 p-10 mb-10 bg-white shadow-md rounded-xl">
-                <UrlFrom createUrl={createUrl} loading={loading} />
+                <UrlFrom />
             </div>
             <div className="p-10 mb-10 bg-white shadow-md rounded-xl">
                 {
@@ -37,7 +37,7 @@ function Dashboard() {
                     )
                     
                 }
-                <UrlsList urls={urls} loading={loading} getUrls={getUrls} deleteUrl={deleteUrl} />
+                <UrlsList />
             </div>
         </div>
         

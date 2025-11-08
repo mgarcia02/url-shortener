@@ -1,9 +1,10 @@
 import { useState } from "react"
-import type { UrlFormProps } from "../types/urlTypes"
+import useUrls from "../hooks/useUrls"
 
-function UrlFrom({ createUrl, loading }: UrlFormProps) {
+function UrlFrom() {
     const [short, setShortUrl] = useState("")
     const [original, setOriginalUrl] = useState("")
+    const { loading, createUrl } = useUrls()
 
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
