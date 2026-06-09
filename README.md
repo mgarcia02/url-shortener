@@ -1,54 +1,81 @@
-# Short URL Project
-Este proyecto es un acortador de URLs construido con Node.js, Express, TypeScript y Prisma. Permite:
-- Generar URLs cortas personalizadas o automáticas
-- Redirigir a la URL original mediante el código corto
-- Llevar un seguimiento de clics por URL
-- Usar el sistema en modo demo (sin registro) o autenticado
+# Short URL
+ 
+Acortador de URLs full-stack con soporte para modo demo y sesión autenticada. Genera códigos cortos personalizados o automáticos, redirige al destino original y lleva un registro de clics por URL.
+ 
+![Preview](./assets/preview.png)
 
+ 
+## Stack
+ 
+| Capa | Tecnología |
+|---|---|
+| Frontend | React · TypeScript · Vite · Tailwind CSS |
+| Backend | Node.js · Express · TypeScript |
+| Base de datos | Prisma · SQLite |
+| Autenticación | JWT · cookies HTTP-only |
+
+ 
+## Puesta en marcha
+
+### Backend
+ 
+```bash
+cd backend
+npm install
+```
+ 
+Crea el archivo `backend/.env`:
+ 
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET=tu_secreto_aquí
+```
+ 
+```bash
+npx prisma migrate dev
+npm run dev
+# → http://localhost:3000
+```
+ 
+### Frontend
+ 
+```bash
+cd frontend
+npm install
+npm run dev
+# → http://localhost:5173
+```
+ 
+## API
+ 
+| Método | Ruta | Descripción |
+|---|---|---|
+| `POST` | `/urls/` | Acorta una URL |
+| `GET` | `/resolve/:shortCode` | Redirige a la URL original |
+| `GET` | `/urls/` | Lista todas las URLs del usuario |
+| `DELETE` | `/urls/:shortCode` | Elimina una URL |
+
+ 
+## Autenticación
+ 
+El sistema funciona en dos modos:
+ 
+**Modo demo** — Las URLs se guardan en `localStorage`. No requiere cuenta ni backend.
+ 
+**Modo autenticado** — Las URLs se persisten en base de datos asociadas al usuario. La autenticación usa JWT almacenado en cookies HTTP-only, protegiendo contra ataques XSS. El frontend adapta su comportamiento automáticamente según el estado de sesión.
+
+ 
 ## Estructura del proyecto
-
-```plaintext
+ 
+```
 short-url-project/
-├── backend/          # Backend Express con Prisma
-│   ├── src/          # Rutas, controladores, servicios, repositorios
-│   ├── prisma/       # Esquema de base de datos y migraciones
-│   └── .env          # Variables de entorno
-├── frontend/         # Interfaz web con React + Tailwind
-├── .gitignore        # Archivos ignorados por Git
-└── README.md         # Este archivo
+├── backend/
+│   ├── src/          # Rutas, controladores, servicios y repositorios
+│   └── prisma/       # Esquema de base de datos y migraciones
+└── frontend/
+    └── src/          # Componentes, páginas y servicios
 ```
 
-## Endpoints principales
-| Método | Ruta | Descripción |
-| --- | --- | --- |
-| POST | /urls/ | Acorta una URL |
-| GET | /resolve/:shortCode | Redirige a la URL original |
-| GET | /urls/ | Lista todas las URLs |
-| DELETE | /urls/:shortCode | Elimina una URL |
-
-## Tecnologías utilizadas
-### Backend
-- Node.js + Express
-- TypeScript
-- Prisma + SQLite
-- JWT
-
-### Frontend
-- React
-- Tailwind CSS
-- Vite
-- Toastify para notificaciones
-- LocalStorage para modo demo sin login
-
-## Autenticación
-El sistema funciona en dos modos:
-- **Modo demo sin registro**
-  - Las URLs se guardan localmente en localStorage.
-  - No requiere backend ni base de datos.
-  - Ideal para probar el sistema sin crear cuenta.
-
-- **Modo autenticado con sesión persistente**
-  - Las URLs se guardan en la base de datos y se asocian al usuario.
-  - La autenticación se realiza mediante JWT almacenado en cookies HTTP-only, lo que garantiza seguridad frente a ataques XSS.
-  - El backend valida el token en cada petición protegida.
-  - El frontend detecta si el usuario está autenticado y adapta el comportamiento.
+ ---
+ 
+*Proyecto personal. Desarrollado para practicar autenticación con JWT, arquitectura por capas en Express y gestión de estado en el frontend.*
